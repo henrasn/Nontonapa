@@ -8,7 +8,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.Cache
-import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -21,12 +20,6 @@ import javax.inject.Singleton
 object NetworkModule {
 
     @Provides
-    @Singleton
-    fun provideAuthInterceptor(): Interceptor {
-        return AuthInterceptor()
-    }
-
-    @Provides
     fun provideCache(@ApplicationContext context: Context): Cache {
         val cacheSize = 10 * 1024 * 1024
         val cacheDir = context.cacheDir
@@ -36,16 +29,20 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        interceptor: Interceptor,
         cache: Cache
     ): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
+
+        val authInterceptor = AuthInterceptor()
+        val apiErrorInterceptor = ApiErrorInterceptor()
+
         return OkHttpClient.Builder()
             .cache(cache)
             .addInterceptor(logging)
-            .addInterceptor(interceptor)
+            .addInterceptor(authInterceptor)
+            .addInterceptor(apiErrorInterceptor)
             .build()
     }
 
@@ -54,7 +51,7 @@ object NetworkModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val json = Json { ignoreUnknownKeys = true }
         return Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
+            .baseUrl("https://api.themoviedb.org/")
             .client(okHttpClient)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()

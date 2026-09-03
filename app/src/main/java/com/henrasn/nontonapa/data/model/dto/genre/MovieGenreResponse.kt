@@ -1,4 +1,4 @@
-package com.henrasn.nontonapa.model.dto.genre
+package com.henrasn.nontonapa.data.model.dto.genre
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
