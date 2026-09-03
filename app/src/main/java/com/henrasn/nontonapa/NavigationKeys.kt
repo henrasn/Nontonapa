@@ -7,4 +7,6 @@ import kotlinx.serialization.Serializable
 data object Genre : NavKey
 
 @Serializable
-data object Movie : NavKey
+data class Movie(val genreId:Int) : NavKey
+@Serializable
+data class DetailMovie(val movieId:Int) : NavKey

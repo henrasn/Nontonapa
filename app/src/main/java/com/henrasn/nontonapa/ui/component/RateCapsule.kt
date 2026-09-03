@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,8 +32,8 @@ fun RateCapsule(modifier: Modifier = Modifier, rate: Float) {
     ) {
         Icon(
             modifier = Modifier.size(12.dp),
-            imageVector = Icons.Filled.Star,
-            contentDescription = "Star Rating",
+            imageVector = Icons.Filled.ThumbUp,
+            contentDescription = "vote",
             tint = DarkGold
         )
 
