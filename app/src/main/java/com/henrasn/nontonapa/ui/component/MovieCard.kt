@@ -1,6 +1,7 @@
 package com.henrasn.nontonapa.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,15 +21,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.henrasn.nontonapa.R
+import com.henrasn.nontonapa.data.model.uimodel.movie.MovieUiData
 import com.henrasn.nontonapa.ui.theme.NontonTheme
 
 @Composable
-fun LargeCard(modifier: Modifier = Modifier) {
+fun MovieCard(modifier: Modifier = Modifier, movie: MovieUiData, onMovieSelected: () -> Unit) {
     ElevatedCard(
         modifier = modifier
             .padding(8.dp)
-            .fillMaxWidth(0.7f)
-            .aspectRatio(2 / 3f),
+            .fillMaxWidth()
+            .aspectRatio(3/2f)
+            .clickable(onClick = onMovieSelected),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
         )
@@ -37,14 +40,7 @@ fun LargeCard(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.BottomStart
         ) {
-            Image(
-                modifier = Modifier.fillMaxSize(),
-                painter = painterResource(R.drawable.sample_poster),
-                contentDescription = null,
-                contentScale = ContentScale.Fit
-            )
-
-            GradientWhite()
+            ImageUrl(url = "https://image.tmdb.org/t/p/w500/" + movie.backdropPath.trimStart('/'))
 
             Column(modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 RateCapsule(rate = 8.7f)
@@ -57,8 +53,10 @@ fun LargeCard(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun PreviewLargeCard() {
+private fun PreviewMovieCard() {
     NontonTheme {
-        LargeCard()
+        MovieCard(
+            movie = MovieUiData(0, title = "title", backdropPath = "", releaseDate = "date", voteAverage = 8.9f)
+        ){}
     }
 }

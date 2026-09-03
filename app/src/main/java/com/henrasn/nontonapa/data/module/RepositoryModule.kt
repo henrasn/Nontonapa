@@ -1,5 +1,7 @@
 package com.henrasn.nontonapa.data.module
 
+import com.henrasn.nontonapa.data.repo.MovieDetailRepository
+import com.henrasn.nontonapa.data.repo.MovieDetailRepositoryImpl
 import com.henrasn.nontonapa.data.repo.MovieRepository
 import com.henrasn.nontonapa.data.repo.MovieRepositoryImpl
 import dagger.Binds
@@ -13,4 +15,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindMovieRepository(repo: MovieRepositoryImpl): MovieRepository
+
+    @Binds
+    abstract fun bindMovieDetailRepository(repo: MovieDetailRepositoryImpl): MovieDetailRepository
 }
