@@ -23,6 +23,9 @@ data class ReviewItem(
     @SerialName("author")
     val author: String? = null,
 
+    @SerialName("author_details")
+    val authorDetails: AuthorDetails? = null,
+
     @SerialName("content")
     val content: String? = null,
 
@@ -34,4 +37,19 @@ data class ReviewItem(
 
     @SerialName("url")
     val url: String? = null
+)
+
+@Serializable
+data class AuthorDetails(
+    @SerialName("name")
+    val name: String? = null,
+
+    @SerialName("username")
+    val username: String? = null,
+
+    @SerialName("avatar_path")
+    val avatarPath: String? = null,
+
+    @SerialName("rating")
+    val rating: Float? = null
 )

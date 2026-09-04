@@ -5,5 +5,5 @@ import com.henrasn.nontonapa.data.model.dto.moviereview.MovieReviewResponse
 
 interface MovieDetailDataSource {
     suspend fun getMovieDetail(movieId: Int): MovieDetailResponse
-    suspend fun getMovieReviews(movieId: Int): MovieReviewResponse
+    suspend fun getMovieReviews(movieId: Int, page: Int): MovieReviewResponse
 }

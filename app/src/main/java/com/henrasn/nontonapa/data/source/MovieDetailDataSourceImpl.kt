@@ -12,7 +12,7 @@ class MovieDetailDataSourceImpl @Inject constructor(
         return apiService.getMovieDetail(movieId)
     }
 
-    override suspend fun getMovieReviews(movieId: Int): MovieReviewResponse {
-        return apiService.getMovieReviews(movieId)
+    override suspend fun getMovieReviews(movieId: Int, page: Int): MovieReviewResponse {
+        return apiService.getMovieReviews(movieId, page)
     }
 }

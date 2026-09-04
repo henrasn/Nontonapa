@@ -1,5 +1,6 @@
 package com.henrasn.nontonapa.ui.pages.detail
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,19 +26,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.henrasn.nontonapa.data.model.dto.moviereview.ReviewItem
 import com.henrasn.nontonapa.data.model.uimodel.movie.MovieUiData
 import com.henrasn.nontonapa.ui.component.MovieCard
 import com.henrasn.nontonapa.ui.component.ReviewUiItem
 
 @Composable
-fun DetailMovieScreen(movieId: Int, viewModel: MovieDetailViewModel = hiltViewModel()) {
+fun DetailMovieScreen(
+    movieId: Int,
+    onSeeAllReview: () -> Unit,
+    viewModel: MovieDetailViewModel = hiltViewModel()
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.onIntent(MovieDetailIntent.LoadMovieDetail(movieId))
+        viewModel.onIntent(MovieDetailIntent.LoadMovieReviews(movieId))
     }
 
     LaunchedEffect(Unit) {
@@ -56,12 +61,20 @@ fun DetailMovieScreen(movieId: Int, viewModel: MovieDetailViewModel = hiltViewMo
             SnackbarHost(snackbarHostState)
         }
     ) { innerPadding ->
-        DetailMovieContent(modifier = Modifier.padding(innerPadding), uiState = uiState)
+        DetailMovieContent(
+            modifier = Modifier.padding(innerPadding),
+            uiState = uiState,
+            onSeeAllReview = onSeeAllReview
+        )
     }
 }
 
 @Composable
-fun DetailMovieContent(modifier: Modifier = Modifier, uiState: MovieDetailUiState) {
+fun DetailMovieContent(
+    modifier: Modifier = Modifier,
+    uiState: MovieDetailUiState,
+    onSeeAllReview: () -> Unit
+) {
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -98,7 +111,9 @@ fun DetailMovieContent(modifier: Modifier = Modifier, uiState: MovieDetailUiStat
         if (uiState.reviews.isNotEmpty()) {
             item {
                 Text(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = onSeeAllReview),
                     text = "See All",
                     style = MaterialTheme.typography.titleSmall,
                     textAlign = TextAlign.End
@@ -107,7 +122,7 @@ fun DetailMovieContent(modifier: Modifier = Modifier, uiState: MovieDetailUiStat
         }
 
         items(uiState.reviews) { review ->
-            ReviewUiItem(review)
+            ReviewUiItem(review = review, enableEllipsis = true)
         }
     }
 }

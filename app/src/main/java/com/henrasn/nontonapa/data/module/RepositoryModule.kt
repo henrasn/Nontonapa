@@ -4,6 +4,8 @@ import com.henrasn.nontonapa.data.repo.MovieDetailRepository
 import com.henrasn.nontonapa.data.repo.MovieDetailRepositoryImpl
 import com.henrasn.nontonapa.data.repo.MovieRepository
 import com.henrasn.nontonapa.data.repo.MovieRepositoryImpl
+import com.henrasn.nontonapa.data.repo.ReviewRepository
+import com.henrasn.nontonapa.data.repo.ReviewRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -18,4 +20,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindMovieDetailRepository(repo: MovieDetailRepositoryImpl): MovieDetailRepository
+
+    @Binds
+    abstract fun bindReviewRepository(repo: ReviewRepositoryImpl): ReviewRepository
 }
