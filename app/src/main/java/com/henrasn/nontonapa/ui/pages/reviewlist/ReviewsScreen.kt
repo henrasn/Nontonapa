@@ -1,4 +1,4 @@
-package com.henrasn.nontonapa.ui.pages.movie
+package com.henrasn.nontonapa.ui.pages.reviewlist
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,26 +27,23 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.henrasn.nontonapa.core.error.toUiText
-import com.henrasn.nontonapa.data.model.uimodel.movie.MovieUiData
-import com.henrasn.nontonapa.ui.component.MovieCard
+import com.henrasn.nontonapa.data.model.uimodel.moviereview.MovieReviewUiData
+import com.henrasn.nontonapa.ui.component.ReviewUiItem
+import com.henrasn.nontonapa.ui.pages.movie.MoviesContent
 
 @Composable
-fun MoviesScreen(
-    genreId: Int,
-    viewModel: MovieViewModel = hiltViewModel(),
-    onMovieSelected: (Int) -> Unit
-) {
-    val moviesPaging: LazyPagingItems<MovieUiData> =
-        viewModel.moviesPaging.collectAsLazyPagingItems()
+fun ReviewsScreen(movieId: Int,viewModel: ReviewListViewModel= hiltViewModel()) {
+    val reviewsPaging: LazyPagingItems<MovieReviewUiData> =
+        viewModel.reviewsPaging.collectAsLazyPagingItems()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
     val error = when {
-        moviesPaging.loadState.refresh is LoadState.Error ->
-            (moviesPaging.loadState.refresh as LoadState.Error).error
+        reviewsPaging.loadState.refresh is LoadState.Error ->
+            (reviewsPaging.loadState.refresh as LoadState.Error).error
 
-        moviesPaging.loadState.append is LoadState.Error ->
-            (moviesPaging.loadState.append as LoadState.Error).error
+        reviewsPaging.loadState.append is LoadState.Error ->
+            (reviewsPaging.loadState.append as LoadState.Error).error
 
         else -> null
     }
@@ -59,25 +56,23 @@ fun MoviesScreen(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.setGenre(genreId)
+        viewModel.setMovie(movieId)
     }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
-        MoviesContent(
+        ReviewsContent(
             modifier = Modifier.padding(innerPadding),
-            moviesPaging = moviesPaging,
-            onMovieSelected = onMovieSelected
+            reviewPaging = reviewsPaging,
         )
     }
 }
 
 @Composable
-fun MoviesContent(
+fun ReviewsContent(
     modifier: Modifier = Modifier,
-    moviesPaging: LazyPagingItems<MovieUiData>,
-    onMovieSelected: (Int) -> Unit
+    reviewPaging: LazyPagingItems<MovieReviewUiData>,
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -89,18 +84,15 @@ fun MoviesContent(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(
-                count = moviesPaging.itemCount,
-                key = moviesPaging.itemKey { it.id }
+                count = reviewPaging.itemCount,
+                key = reviewPaging.itemKey { it.id }
             ) { index ->
-                moviesPaging[index]?.let { movie ->
-                    MovieCard(
-                        movie = movie,
-                        onMovieSelected = { onMovieSelected(movie.id) }
-                    )
+                reviewPaging[index]?.let { review ->
+                    ReviewUiItem(review = review)
                 }
             }
 
-            when (moviesPaging.loadState.append) {
+            when (reviewPaging.loadState.append) {
                 is LoadState.Loading -> {
                     item {
                         Box(
@@ -120,8 +112,8 @@ fun MoviesContent(
                                 .padding(8.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text("Couldn't load more movies")
-                            TextButton(onClick = { moviesPaging.retry() }) {
+                            Text("Couldn't load more reviews")
+                            TextButton(onClick = { reviewPaging.retry() }) {
                                 Text("Retry")
                             }
                         }
@@ -133,4 +125,3 @@ fun MoviesContent(
         }
     }
 }
-

@@ -44,8 +44,8 @@ fun MovieCard(modifier: Modifier = Modifier, movie: MovieUiData, onMovieSelected
 
             Column(modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 RateCapsule(rate = 8.7f)
-                Text("Echoes of Saturn", style = MaterialTheme.typography.titleLarge)
-                Text("Sci-Fi • Thriller", style = MaterialTheme.typography.titleSmall)
+                Text(movie.title, style = MaterialTheme.typography.titleLarge)
+                Text(movie.releaseDate, style = MaterialTheme.typography.titleSmall)
             }
         }
     }

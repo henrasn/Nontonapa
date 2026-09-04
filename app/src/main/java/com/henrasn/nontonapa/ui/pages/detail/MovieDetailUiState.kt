@@ -5,7 +5,7 @@ import com.henrasn.nontonapa.data.model.uimodel.moviereview.MovieReviewUiData
 
 data class MovieDetailUiState(
     val movie: MovieDetailUiData? = null,
-    val isLoading: Boolean = false,
     val reviews: List<MovieReviewUiData> = emptyList(),
+    val isLoading: Boolean = false,
     val isReviewLoading: Boolean = false,
 )

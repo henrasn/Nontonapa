@@ -10,3 +10,5 @@ data object Genre : NavKey
 data class Movie(val genreId:Int) : NavKey
 @Serializable
 data class DetailMovie(val movieId:Int) : NavKey
+@Serializable
+data class ReviewList(val movieId:Int) : NavKey
